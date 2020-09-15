@@ -19,7 +19,7 @@ class RegisterVC: UIViewController {
     
     private let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person")
+        imageView.image = UIImage(systemName: "person.circle")
         imageView.tintColor = .gray
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
@@ -108,8 +108,8 @@ class RegisterVC: UIViewController {
         view.backgroundColor = .white
         
         RegisterButton.addTarget(self,
-                              action: #selector(didTapLogin),
-                              for: .touchUpInside)
+                                 action: #selector(didTapLogin),
+                                 for: .touchUpInside)
         
         emailField.delegate = self
         passwordField.delegate = self
@@ -138,9 +138,9 @@ class RegisterVC: UIViewController {
         
         let size = scrollView.width/3
         profileImageView.frame = CGRect(x: (view.width-size)/2,
-                                     y: 50,
-                                     width: size,
-                                     height: size)
+                                        y: 50,
+                                        width: size,
+                                        height: size)
         profileImageView.layer.cornerRadius = profileImageView.width/2
         
         firstNameField.frame = CGRect(x: 30,
@@ -161,9 +161,9 @@ class RegisterVC: UIViewController {
                                      width: scrollView.width - 60,
                                      height: 52)
         RegisterButton.frame = CGRect(x: 30,
-                                   y: passwordField.bottom + 20,
-                                   width: scrollView.width - 60,
-                                   height: 52)
+                                      y: passwordField.bottom + 20,
+                                      width: scrollView.width - 60,
+                                      height: 52)
     }
     
     @objc private func didTapChangeProfilePic() {
@@ -182,24 +182,42 @@ class RegisterVC: UIViewController {
             !email.isEmpty, !password.isEmpty, !firstName.isEmpty, !lastName.isEmpty,
             password.count >= 6 else {
                 alertUserLoginError()
-                
                 return
         }
         
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-            guard let result = authResult, error == nil else {
-                print("Error creating user.")
+        // Firebase Log In
+        
+        DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
+            guard let strongSelf = self else {
                 return
             }
             
-            let user = result.user
-            print("Created User. \(user)")
-        }
+            guard !exists else {
+                // user already exists
+                strongSelf.alertUserLoginError(message: "Looks like a user account for that email address already exists.")
+                return
+            }
+            
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                guard authResult != nil, error == nil else {
+                    print("Error creating user.")
+                    strongSelf.alertUserLoginError(message: "Looks like a user account for that email address already exists.")
+                    return
+                }
+                
+                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
+                                                                    lastName: lastName,
+                                                                    emailAddress: email))
+                
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            }
+            
+        })
     }
     
-    private func alertUserLoginError() {
+    private func alertUserLoginError(message: String = "Please enter all information to create account.") {
         let alert = UIAlertController(title: "Woops",
-                                      message: "Please enter all information to creat a new account.",
+                                      message: message,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss",
                                       style: .cancel,
