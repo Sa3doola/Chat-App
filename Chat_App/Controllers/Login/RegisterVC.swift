@@ -266,4 +266,5 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+    
 }
