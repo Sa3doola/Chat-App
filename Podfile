@@ -1,9 +1,8 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '13.0'
+platform :ios, '13.7'
 
 target 'Chat_App' do
   use_frameworks!
-  platform :ios, '13.0'
 
  # Firebase
   pod 'Firebase/Core'
@@ -16,4 +15,9 @@ target 'Chat_App' do
 
   # Google Sign In
   pod 'GoogleSignIn'
+
+    pod 'MessageKit'
+    pod 'JGProgressHUD'
+    pod 'RealmSwift'
+    pod 'SDWebImage'
 end
