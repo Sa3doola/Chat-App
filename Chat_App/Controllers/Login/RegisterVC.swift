@@ -8,8 +8,11 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class RegisterVC: UIViewController {
+    
+    private let spinner = JGProgressHUD(style: .dark)
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -108,7 +111,7 @@ class RegisterVC: UIViewController {
         view.backgroundColor = .white
         
         RegisterButton.addTarget(self,
-                                 action: #selector(didTapLogin),
+                                 action: #selector(registerButtonTapped),
                                  for: .touchUpInside)
         
         emailField.delegate = self
@@ -170,7 +173,7 @@ class RegisterVC: UIViewController {
         presentPhotoActionSheet()
     }
     
-    @objc private func didTapLogin() {
+    @objc private func registerButtonTapped() {
         
         firstNameField.resignFirstResponder()
         lastNameField.resignFirstResponder()
@@ -185,11 +188,17 @@ class RegisterVC: UIViewController {
                 return
         }
         
+        spinner.show(in: view)
+        
         // Firebase Log In
         
         DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
             guard let strongSelf = self else {
                 return
+            }
+            
+            DispatchQueue.main.async {
+                 strongSelf.spinner.dismiss()
             }
             
             guard !exists else {
@@ -236,7 +245,7 @@ extension RegisterVC: UITextFieldDelegate {
             passwordField.becomeFirstResponder()
         }
         else if textField == passwordField {
-            didTapLogin()
+            registerButtonTapped()
         }
         return true
     }
