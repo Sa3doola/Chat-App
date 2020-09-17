@@ -32,6 +32,9 @@ class ConversationVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose,
+                                                            target: self,
+                                                            action: #selector(didTapComposeButton))
         view.addSubview(tableView)
         view.addSubview(noConversationLable)
         setupTableView()
@@ -47,6 +50,13 @@ class ConversationVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+    }
+    
+    @objc private func didTapComposeButton() {
+        let vc = NewConversationVC()
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
     
     private func validateAuth() {
@@ -79,6 +89,7 @@ extension ConversationVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = "Hello World"
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     

@@ -8,7 +8,7 @@ target 'Chat_App' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
-  pod 'Firebase/Core'
+  pod 'Firebase/Storage'
 
   # Facebook Sign In
   pod 'FBSDKLoginKit'
@@ -16,8 +16,8 @@ target 'Chat_App' do
   # Google Sign In
   pod 'GoogleSignIn'
 
-    pod 'MessageKit'
-    pod 'JGProgressHUD'
-    pod 'RealmSwift'
-    pod 'SDWebImage'
+  pod 'MessageKit'
+  pod 'JGProgressHUD'
+  pod 'RealmSwift'
+  pod 'SDWebImage'
 end
