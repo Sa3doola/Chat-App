@@ -24,6 +24,7 @@
 		931102E3250D0AE3007D4AC3 /* NewConversationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E2250D0AE3007D4AC3 /* NewConversationVC.swift */; };
 		931102E5250D0B03007D4AC3 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E4250D0B03007D4AC3 /* ProfileVC.swift */; };
 		931102E8250D1666007D4AC3 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E7250D1666007D4AC3 /* Extentions.swift */; };
+		93B229A82513C4910081324E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B229A72513C4910081324E /* StorageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		931102E2250D0AE3007D4AC3 /* NewConversationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationVC.swift; sourceTree = "<group>"; };
 		931102E4250D0B03007D4AC3 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		931102E7250D1666007D4AC3 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		93B229A72513C4910081324E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E44771687C777A6DD21CA9DD /* Pods-Chat_App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat_App.release.xcconfig"; path = "Target Support Files/Pods-Chat_App/Pods-Chat_App.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,6 +157,7 @@
 				931102C1250D0542007D4AC3 /* SceneDelegate.swift */,
 				931102E7250D1666007D4AC3 /* Extentions.swift */,
 				930A5B2525107B6500E76E4C /* DatabaseManager.swift */,
+				93B229A72513C4910081324E /* StorageManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				931102DE250D0A61007D4AC3 /* PhotoViewerVC.swift in Sources */,
 				931102C2250D0542007D4AC3 /* SceneDelegate.swift in Sources */,
 				931102DC250D0A1E007D4AC3 /* RegisterVC.swift in Sources */,
+				93B229A82513C4910081324E /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
