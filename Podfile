@@ -3,6 +3,7 @@
 
 target 'Chat_App' do
   use_frameworks!
+  platform :ios, '13.0'
 
  # Firebase
   pod 'Firebase/Core'
@@ -10,7 +11,9 @@ target 'Chat_App' do
   pod 'Firebase/Database'
   pod 'Firebase/Core'
 
-  # Facebook
+  # Facebook Sign In
   pod 'FBSDKLoginKit'
 
+  # Google Sign In
+  pod 'GoogleSignIn'
 end
