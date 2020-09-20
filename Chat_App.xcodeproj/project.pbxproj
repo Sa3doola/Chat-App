@@ -117,12 +117,12 @@
 		931102D3250D083B007D4AC3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				931102E6250D0E86007D4AC3 /* Login */,
 				931102C3250D0542007D4AC3 /* ConversationVC.swift */,
+				931102E6250D0E86007D4AC3 /* Login */,
+				931102E2250D0AE3007D4AC3 /* NewConversationVC.swift */,
 				930B581F2512F1FA002B7C59 /* ChatVC.swift */,
 				931102DD250D0A61007D4AC3 /* PhotoViewerVC.swift */,
 				931102E0250D0A92007D4AC3 /* VideoPlayerVC.swift */,
-				931102E2250D0AE3007D4AC3 /* NewConversationVC.swift */,
 				931102E4250D0B03007D4AC3 /* ProfileVC.swift */,
 			);
 			path = Controllers;
