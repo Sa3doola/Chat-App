@@ -10,13 +10,28 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 
+struct Conversation {
+    let id: String
+    let name: String
+    let otherUserEmail: String
+    let latestMessage: LatestMessage
+}
+
+struct LatestMessage {
+    let date: String
+    let text: String
+    let isRead: Bool
+}
+
 class ConversationVC: UIViewController {
     
     private let spinner = JGProgressHUD(style: .dark)
     
+    private var conversations = [Conversation]()
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(ConversationTVC.self, forCellReuseIdentifier: ConversationTVC.id)
         return tableView
     }()
     
@@ -39,6 +54,7 @@ class ConversationVC: UIViewController {
         view.addSubview(noConversationLable)
         setupTableView()
         fetchConversation()
+        startListeningForConversation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -50,6 +66,25 @@ class ConversationVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+    }
+    
+    private func startListeningForConversation() {
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
+            return
+        }
+        
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
+            switch result {
+            case.success(let conversation):
+                guard !conversation.isEmpty else {
+                    return
+                }
+                self?.conversations = conversation
+            case.failure(let error):
+                print("failed to get convo: \(error)")
+            }
+        })
     }
     
     @objc private func didTapComposeButton() {

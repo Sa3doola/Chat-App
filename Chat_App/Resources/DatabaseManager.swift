@@ -16,7 +16,7 @@ final class DatabaseManager {
     private let database = Database.database().reference()
     
     public typealias getAllUsers = (Result<[[String: String]], Error>) -> Void
-    public typealias getAllConversation = (Result<String, Error>) -> Void
+    public typealias getAllConversation = (Result<[Conversation], Error>) -> Void
     
     static func safeEmail(emailAddress: String) -> String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
@@ -115,39 +115,9 @@ extension DatabaseManager {
 
 extension DatabaseManager {
     
-    /*
-     
-     sadjhhgdja {
-     "messages": [
-     {
-     "id": String
-     "type": text, photo, video
-     "content": String
-     "date": Date()
-     "sender_email": String
-     "is_read": true/false
-     }
-     ]
-     
-     }
-     
-     conversation => [
-     {
-     "conversation_id": "sadjhhgdja"
-     "otherUserEmail":
-     "latest_message": => {
-     "conversation_id":
-     "date": Date()
-     "latest_message": "message"
-     "is_read": true/false
-     }
-     
-     }
-     ]
-     */
     
     /// Create a new conversation with target user email and first message sent
-    public func createNewConversation(with otherUserEmail: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+    public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
@@ -196,6 +166,7 @@ extension DatabaseManager {
             let newConversation: [String: Any] = [
                 "id": conversationID,
                 "other_user_email": otherUserEmail,
+                "name": name,
                 "latest_message": [
                     "date": dateString,
                     "message": message,
@@ -212,7 +183,7 @@ extension DatabaseManager {
                         completion(false)
                         return
                     }
-                    self?.finishCreatingConversation(conversationID: conversationID, firstMessage: firstMessage, completion: completion)
+                    self?.finishCreatingConversation(name: name, conversationID: conversationID, firstMessage: firstMessage, completion: completion)
                 })
                 
             }
@@ -228,13 +199,13 @@ extension DatabaseManager {
                         completion(false)
                         return
                     }
-                    self?.finishCreatingConversation(conversationID: conversationID, firstMessage: firstMessage, completion: completion)
+                    self?.finishCreatingConversation(name: name, conversationID: conversationID, firstMessage: firstMessage, completion: completion)
                 })
             }
         })
     }
     
-    private func finishCreatingConversation(conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
+    private func finishCreatingConversation(name: String, conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
         
         let messageDate = firstMessage.sentDate
         let dateString = ChatVC.dateFormatter.string(from: messageDate)
@@ -278,7 +249,8 @@ extension DatabaseManager {
             "content": message,
             "date": dateString,
             "sender_email": currentUserEmail,
-            "is_read": false
+            "is_read": false,
+            "name": name
         ]
         
         let value: [String: Any] = [
@@ -300,6 +272,11 @@ extension DatabaseManager {
     
     /// Fetches and return  all conversations for the user passed in email
     public func getAllConversations(for email: String, completion: @escaping getAllConversation) {
+        
+        database.child("\(email)/conversations").observe(.value, with: { snapshot in
+            
+        })
+        
         
     }
     
