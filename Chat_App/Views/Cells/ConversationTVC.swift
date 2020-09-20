@@ -63,7 +63,7 @@ class ConversationTVC: UITableViewCell {
                                         height: (contentView.height-20)/2)
     }
     
-    public func configure(with model: String) {
+    public func configure(with model: Conversation) {
         
     }
     
