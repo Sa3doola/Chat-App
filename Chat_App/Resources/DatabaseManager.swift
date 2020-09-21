@@ -17,6 +17,7 @@ final class DatabaseManager {
     
     public typealias getAllUsers = (Result<[[String: String]], Error>) -> Void
     public typealias getAllConversation = (Result<[Conversation], Error>) -> Void
+    public typealias getAllMessages = (Result<[Message], Error>) -> Void
     
     static func safeEmail(emailAddress: String) -> String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
@@ -303,7 +304,35 @@ extension DatabaseManager {
     }
     
     /// Get all Messages for given conversation
-    public func getAllMessagesForConversations(with id: String, completion: @escaping getAllConversation) {
+    public func getAllMessagesForConversations(with id: String, completion: @escaping getAllMessages) {
+        
+        database.child("\(id)/messages").observe(.value, with: { snapshot in
+            guard let value = snapshot.value as? [[String: Any]] else {
+                completion(.failure(DatabaseError.failedToFetch))
+                print("failed y m3lemy")
+                return
+            }
+            
+            
+            let messages: [Message] = value.compactMap({ dictionary in
+                guard let messageID = dictionary["id"] as? String,
+                    let name = dictionary["name"] as? String,
+                    let senderEmail = dictionary["sender_email"] as? String,
+                    let date = dictionary["date"] as? String,
+                    let content = dictionary["content"] as? String,
+                    let dateSring = ChatVC.dateFormatter.date(from: date)
+                    else {
+                        return nil
+                }
+                
+                let sender = Sender(photoURL: "", senderId: senderEmail, displayName: name)
+                
+                return Message(sender: sender, messageId: messageID, sentDate: dateSring, kind: .text(content))
+                
+            })
+            
+            completion(.success(messages))
+        })
         
     }
     

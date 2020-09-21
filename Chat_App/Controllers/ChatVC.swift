@@ -60,7 +60,8 @@ class ChatVC: MessagesViewController {
         return formatter
     }()
     
-    public var otherUserEmail: String
+    public let otherUserEmail: String
+    private let conversationID: String?
     public var isNewconversation = false
     
     private var messages = [Message]()
@@ -74,20 +75,44 @@ class ChatVC: MessagesViewController {
                displayName: "Sa3doola")
     }
     
-    init(with email: String) {
+    init(with email: String, id: String?) {
+        self.conversationID = id
         self.otherUserEmail = email
         super.init(nibName: nil, bundle: nil)
+        if let conversationId = conversationID {
+            listenForMessages(id: conversationId)
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func listenForMessages(id: String) {
+        DatabaseManager.shared.getAllMessagesForConversations(with: id, completion: { [weak self] result in
+            switch result {
+            case.success(let messages):
+                guard !messages.isEmpty else {
+                    return
+                }
+                
+                self?.messages = messages
+                
+                DispatchQueue.main.async {
+                    self?.messagesCollectionView.reloadDataAndKeepOffset()
+                }
+                
+            case.failure(let error):
+                print("failed to get message: \(error)")
+            }
+        })
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         view.backgroundColor = .systemBackground
+        
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -154,8 +179,6 @@ extension ChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDel
             return sender
         }
         fatalError("Self sender is nil, email should be cashed")
-        return Sender(photoURL: "",
-                      senderId: "123", displayName: "")
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
