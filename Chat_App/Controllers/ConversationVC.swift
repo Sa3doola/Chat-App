@@ -81,6 +81,10 @@ class ConversationVC: UIViewController {
                     return
                 }
                 self?.conversations = conversation
+                
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
             case.failure(let error):
                 print("failed to get convo: \(error)")
             }
@@ -154,6 +158,10 @@ extension ConversationVC: UITableViewDelegate, UITableViewDataSource {
         vc.title = model.name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 120
     }
 }
 
