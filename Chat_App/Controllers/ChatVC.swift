@@ -70,8 +70,11 @@ class ChatVC: MessagesViewController {
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
             return nil
         }
+        
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        
        return Sender(photoURL: "",
-               senderId: email,
+               senderId: safeEmail,
                displayName: "Sa3doola")
     }
     
@@ -80,7 +83,7 @@ class ChatVC: MessagesViewController {
         self.otherUserEmail = email
         super.init(nibName: nil, bundle: nil)
         if let conversationId = conversationID {
-            listenForMessages(id: conversationId)
+            listenForMessages(id: conversationId, shouldScrollToBottom: true)
         }
     }
     
@@ -88,10 +91,11 @@ class ChatVC: MessagesViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func listenForMessages(id: String) {
+    private func listenForMessages(id: String, shouldScrollToBottom: Bool) {
         DatabaseManager.shared.getAllMessagesForConversations(with: id, completion: { [weak self] result in
             switch result {
             case.success(let messages):
+                print("Successfully get messages: \(messages)")
                 guard !messages.isEmpty else {
                     return
                 }
@@ -99,7 +103,13 @@ class ChatVC: MessagesViewController {
                 self?.messages = messages
                 
                 DispatchQueue.main.async {
+                    
                     self?.messagesCollectionView.reloadDataAndKeepOffset()
+                    
+                    if shouldScrollToBottom {
+                        self?.messagesCollectionView.scrollToBottom()
+                    }
+            
                 }
                 
             case.failure(let error):
