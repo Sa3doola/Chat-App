@@ -8,6 +8,7 @@
 
 import Foundation
 import FirebaseDatabase
+import MessageKit
 
 final class DatabaseManager {
     
@@ -15,9 +16,9 @@ final class DatabaseManager {
     
     private let database = Database.database().reference()
     
-    public typealias getAllUsers = (Result<[[String: String]], Error>) -> Void
-    public typealias getAllConversation = (Result<[Conversation], Error>) -> Void
-    public typealias getAllMessages = (Result<[Message], Error>) -> Void
+    public typealias getAllUsersCompletion = (Result<[[String: String]], Error>) -> Void
+    public typealias getAllConversationCompletion = (Result<[Conversation], Error>) -> Void
+    public typealias getAllMessagesCompletion = (Result<[Message], Error>) -> Void
     
     static func safeEmail(emailAddress: String) -> String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
@@ -111,7 +112,7 @@ extension DatabaseManager {
         })
     }
     
-    public func getAllUsers(completion: @escaping getAllUsers) {
+    public func getAllUsers(completion: @escaping getAllUsersCompletion) {
         database.child("Users").observeSingleEvent(of: .value) { (snapshot) in
             guard let value = snapshot.value as? [[String: String]] else {
                 completion(.failure(DatabaseError.failedToFetch))
@@ -313,7 +314,7 @@ extension DatabaseManager {
     }
     
     /// Fetches and return  all conversations for the user passed in email
-    public func getAllConversations(for email: String, completion: @escaping getAllConversation) {
+    public func getAllConversations(for email: String, completion: @escaping getAllConversationCompletion) {
         
         database.child("\(email)/conversations").observe(.value, with: { snapshot in
             guard let value = snapshot.value as? [[String: Any]] else {
@@ -345,7 +346,7 @@ extension DatabaseManager {
     }
     
     /// Get all Messages for given conversation
-    public func getAllMessagesForConversations(with id: String, completion: @escaping getAllMessages) {
+    public func getAllMessagesForConversations(with id: String, completion: @escaping getAllMessagesCompletion) {
         
         database.child("\(id)/messages").observe(.value, with: { snapshot in
             guard let value = snapshot.value as? [[String: Any]] else {
@@ -360,15 +361,43 @@ extension DatabaseManager {
                     let name = dictionary["name"] as? String,
                     let senderEmail = dictionary["sender_email"] as? String,
                     let date = dictionary["date"] as? String,
+                    let type = dictionary["type"] as? String,
                     let content = dictionary["content"] as? String,
                     let dateSring = ChatVC.dateFormatter.date(from: date)
                     else {
                         return nil
                 }
+                var kind: MessageKind?
+                if type == "photo" {
+                    // photo
+                    guard let imageUrl = URL(string: content),
+                    let placeHolder = UIImage(systemName: "plus") else {
+                        return nil
+                    }
+                    let media = Media(url: imageUrl,
+                                      image: nil,
+                                      placeholderImage: placeHolder,
+                                      size: CGSize(width: 300, height: 300))
+                    
+                    
+                    kind = .photo(media)
+                }
+                else {
+                    // text
+                    kind = .text(content)
+                }
+                
+                guard let finalKind = kind else {
+                    return nil
+                }
+                
                 
                 let sender = Sender(photoURL: "", senderId: senderEmail, displayName: name)
                 
-                return Message(sender: sender, messageId: messageID, sentDate: dateSring, kind: .text(content))
+                return Message(sender: sender,
+                               messageId: messageID,
+                               sentDate: dateSring,
+                               kind:  finalKind)
                 
             })
             
@@ -408,7 +437,10 @@ extension DatabaseManager {
                 message = messageText
             case .attributedText(_):
                 break
-            case .photo(_):
+            case .photo(let mediaItem):
+                if let targetUrlString = mediaItem.url?.absoluteString {
+                     message = targetUrlString
+                }
                 break
             case .video(_):
                 break
