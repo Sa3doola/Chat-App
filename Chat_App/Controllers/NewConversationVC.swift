@@ -11,13 +11,13 @@ import JGProgressHUD
 
 class NewConversationVC: UIViewController {
     
-    public var completion: (([String: String]) -> (Void))?
+    public var completion: ((SearchResult) -> (Void))?
     
     private let spinner = JGProgressHUD(style: .dark)
     
     private var users = [[String: String]]()
     
-    private var results = [[String: String]]()
+    private var results = [SearchResult]()
     
     private var hasFetched = false
     
@@ -30,7 +30,8 @@ class NewConversationVC: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.isHidden = true
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(NewConversationTVC.self,
+                           forCellReuseIdentifier: NewConversationTVC.id)
         return tableView
     }()
     
@@ -83,8 +84,9 @@ extension NewConversationVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = results[indexPath.row]["name"]
+        let model = results[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewConversationTVC.id, for: indexPath) as! NewConversationTVC
+        cell.configure(with: model)
         return cell
     }
     
@@ -96,6 +98,10 @@ extension NewConversationVC: UITableViewDelegate, UITableViewDataSource {
         dismiss(animated: true) { [weak self] in
             self?.completion?(targetUserData)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 90
     }
 }
 
@@ -116,7 +122,6 @@ extension NewConversationVC: UISearchBarDelegate {
     
     func searchUsers(query: String) {
         // check is array has firebase result
-        
         if hasFetched {
             // if it does: filter
             filterUsers(with: query)
@@ -138,18 +143,36 @@ extension NewConversationVC: UISearchBarDelegate {
     
     func filterUsers(with term: String) {
         // Update the UI: eitehr show results or show noResults lablel
-        guard hasFetched else {
-            return
+        guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String,
+            hasFetched else {
+                return
         }
+        
+        let safeEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
         
         self.spinner.dismiss()
         
-        let results: [[String: String]] = self.users.filter({
+        let results: [SearchResult] = self.users.filter({
+            
+            guard let email = $0["email"], email != safeEmail else {
+                return false
+            }
+            
             guard let name = $0["name"]?.lowercased() else {
                 return false
             }
+            
             return name.hasPrefix(term.lowercased())
+            
+        }).compactMap({
+            
+            guard let email = $0["email"], let name = $0["name"]else {
+                    return nil
+            }
+            
+            return SearchResult(name: name, email: email)
         })
+        
         self.results = results
         updateUI()
     }
@@ -166,3 +189,4 @@ extension NewConversationVC: UISearchBarDelegate {
         }
     }
 }
+

@@ -345,7 +345,7 @@ extension DatabaseManager {
         
     }
     
-    /// Get all Messages for given conversation
+    /// Gets all Messages for given conversation
     public func getAllMessagesForConversations(with id: String, completion: @escaping getAllMessagesCompletion) {
         
         database.child("\(id)/messages").observe(.value, with: { snapshot in
@@ -354,7 +354,6 @@ extension DatabaseManager {
                 print("failed y m3lemy")
                 return
             }
-            
             
             let messages: [Message] = value.compactMap({ dictionary in
                 guard let messageID = dictionary["id"] as? String,
@@ -371,15 +370,25 @@ extension DatabaseManager {
                 if type == "photo" {
                     // photo
                     guard let imageUrl = URL(string: content),
-                    let placeHolder = UIImage(systemName: "plus") else {
-                        return nil
+                        let placeHolder = UIImage(systemName: "plus") else {
+                            return nil
                     }
                     let media = Media(url: imageUrl,
                                       image: nil,
                                       placeholderImage: placeHolder,
                                       size: CGSize(width: 300, height: 300))
-                    
-                    
+                    kind = .photo(media)
+                }
+                else if type == "video" {
+                    // photo
+                    guard let videoUrl = URL(string: content),
+                        let placeHolder = UIImage(systemName: "plus") else {
+                            return nil
+                    }
+                    let media = Media(url: videoUrl,
+                                      image: nil,
+                                      placeholderImage: placeHolder,
+                                      size: CGSize(width: 300, height: 300))
                     kind = .photo(media)
                 }
                 else {
@@ -442,7 +451,10 @@ extension DatabaseManager {
                      message = targetUrlString
                 }
                 break
-            case .video(_):
+            case .video(let mediaItem):
+                if let targetUrlString = mediaItem.url?.absoluteString {
+                     message = targetUrlString
+                }
                 break
             case .location(_):
                 break
@@ -572,20 +584,4 @@ extension DatabaseManager {
     }
 }
 
-struct ChatAppUser {
-    
-    let firstName: String
-    let lastName: String
-    let emailAddress: String
-    
-    var safeEmail: String {
-        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        return safeEmail
-    }
-    
-    var profilePictureFileName: String {
-        // /images/saadsheri02-gmail-com_profile_picture.png
-        return "\(safeEmail)_profile_picture.png"
-    }
-}
+

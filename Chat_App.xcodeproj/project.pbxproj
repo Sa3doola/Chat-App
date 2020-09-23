@@ -25,6 +25,8 @@
 		931102E5250D0B03007D4AC3 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E4250D0B03007D4AC3 /* ProfileVC.swift */; };
 		931102E8250D1666007D4AC3 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E7250D1666007D4AC3 /* Extentions.swift */; };
 		936C410B2517A5D500FB2CDA /* ConversationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936C410A2517A5D500FB2CDA /* ConversationTVC.swift */; };
+		9399E613251C017400BF9508 /* NewConversationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9399E612251C017400BF9508 /* NewConversationTVC.swift */; };
+		9399E616251C0A7800BF9508 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9399E615251C0A7800BF9508 /* Models.swift */; };
 		93B229A82513C4910081324E /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B229A72513C4910081324E /* StorageManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +52,8 @@
 		931102E4250D0B03007D4AC3 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		931102E7250D1666007D4AC3 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
 		936C410A2517A5D500FB2CDA /* ConversationTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTVC.swift; sourceTree = "<group>"; };
+		9399E612251C017400BF9508 /* NewConversationTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationTVC.swift; sourceTree = "<group>"; };
+		9399E615251C0A7800BF9508 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		93B229A72513C4910081324E /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		E44771687C777A6DD21CA9DD /* Pods-Chat_App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat_App.release.xcconfig"; path = "Target Support Files/Pods-Chat_App/Pods-Chat_App.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,8 +110,7 @@
 			children = (
 				930A5B2325106FBF00E76E4C /* GoogleService-Info.plist */,
 				931102D7250D088C007D4AC3 /* Resources */,
-				931102D6250D0884007D4AC3 /* ViewModels */,
-				931102D5250D087C007D4AC3 /* Models */,
+				9399E614251C0A4500BF9508 /* Model */,
 				931102D4250D086A007D4AC3 /* Views */,
 				931102C8250D0544007D4AC3 /* Assets.xcassets */,
 				931102D3250D083B007D4AC3 /* Controllers */,
@@ -137,20 +140,6 @@
 				931102D8250D08B6007D4AC3 /* Storyboards */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		931102D5250D087C007D4AC3 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		931102D6250D0884007D4AC3 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		931102D7250D088C007D4AC3 /* Resources */ = {
@@ -187,8 +176,17 @@
 			isa = PBXGroup;
 			children = (
 				936C410A2517A5D500FB2CDA /* ConversationTVC.swift */,
+				9399E612251C017400BF9508 /* NewConversationTVC.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		9399E614251C0A4500BF9508 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9399E615251C0A7800BF9508 /* Models.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +334,8 @@
 				931102DA250D0A01007D4AC3 /* LoginVC.swift in Sources */,
 				931102DE250D0A61007D4AC3 /* PhotoViewerVC.swift in Sources */,
 				936C410B2517A5D500FB2CDA /* ConversationTVC.swift in Sources */,
+				9399E616251C0A7800BF9508 /* Models.swift in Sources */,
+				9399E613251C017400BF9508 /* NewConversationTVC.swift in Sources */,
 				931102C2250D0542007D4AC3 /* SceneDelegate.swift in Sources */,
 				931102DC250D0A1E007D4AC3 /* RegisterVC.swift in Sources */,
 				93B229A82513C4910081324E /* StorageManager.swift in Sources */,

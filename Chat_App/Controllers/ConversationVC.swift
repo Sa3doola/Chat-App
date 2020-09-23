@@ -10,19 +10,6 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 
-struct Conversation {
-    let id: String
-    let name: String
-    let otherUserEmail: String
-    let latestMessage: LatestMessage
-}
-
-struct LatestMessage {
-    let date: String
-    let text: String
-    let isRead: Bool
-}
-
 class ConversationVC: UIViewController {
     
     private let spinner = JGProgressHUD(style: .dark)
@@ -66,6 +53,7 @@ class ConversationVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+        
     }
     
     private func startListeningForConversation() {
@@ -102,10 +90,10 @@ class ConversationVC: UIViewController {
         present(nav, animated: true)
     }
     
-    private func createNewConversation(result: [String: String]) {
-        guard let name = result["name"], let email = result["email"] else {
-            return
-        }
+    private func createNewConversation(result: SearchResult) {
+        let name = result.name
+        let email = result.email
+        
         let vc = ChatVC(with: email, id: nil)
         vc.isNewconversation = true
         vc.title = name
