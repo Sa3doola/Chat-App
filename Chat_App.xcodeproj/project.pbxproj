@@ -112,7 +112,6 @@
 				931102D7250D088C007D4AC3 /* Resources */,
 				9399E614251C0A4500BF9508 /* Model */,
 				931102D4250D086A007D4AC3 /* Views */,
-				931102C8250D0544007D4AC3 /* Assets.xcassets */,
 				931102D3250D083B007D4AC3 /* Controllers */,
 				931102CD250D0544007D4AC3 /* Info.plist */,
 			);
@@ -136,6 +135,7 @@
 		931102D4250D086A007D4AC3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				931102C8250D0544007D4AC3 /* Assets.xcassets */,
 				936C41092517A5AE00FB2CDA /* Cells */,
 				931102D8250D08B6007D4AC3 /* Storyboards */,
 			);
