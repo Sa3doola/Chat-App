@@ -24,7 +24,7 @@ class LoginVC: UIViewController {
     
     private let LogoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Logo")
+        imageView.image = UIImage(named: "logo")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -41,7 +41,7 @@ class LoginVC: UIViewController {
         field.font = UIFont(name: "Avenir Next", size: 20)
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
-        field.backgroundColor = .white
+        field.backgroundColor = .secondarySystemBackground
         return field
     }()
     
@@ -56,7 +56,7 @@ class LoginVC: UIViewController {
         field.placeholder = "Password.."
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
-        field.backgroundColor = .white
+        field.backgroundColor = .secondarySystemBackground
         field.isSecureTextEntry = true
         return field
     }()
@@ -97,7 +97,7 @@ class LoginVC: UIViewController {
         GIDSignIn.sharedInstance().signIn()
         
         title = "log in"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Register",
                                                             style: .done,
                                                             target: self,

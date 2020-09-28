@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "chat-app-logo-scaled.jpg",
+      "filename" : "1552489323_7277198925615.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "chat-app-logo-scaled@2x.jpg",
+      "filename" : "1552489323_7277198925615@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "chat-app-logo-scaled@3x.jpg",
+      "filename" : "1552489323_7277198925615@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
