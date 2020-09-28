@@ -10,17 +10,66 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
-import FirebaseStorage
+import SDWebImage
 
 class ProfileVC: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
-    let data = ["Log out"]
+    var data = [ProfileViewModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+        data.append(ProfileViewModel(viewModeltype: .info,
+                                     title: "Name: \(UserDefaults.standard.value(forKey: "name") as? String ?? "No Name")",
+            handler: nil))
+        data.append(ProfileViewModel(viewModeltype: .info,
+                                     title: "Email: \(UserDefaults.standard.value(forKey: "email") as? String ?? "No Email")",
+            handler: nil))
+        data.append(ProfileViewModel(viewModeltype: .logout, title: "Log Out", handler: { [weak self] in
+            
+            guard let strongSelf = self else {
+                return
+            }
+            
+            let actionSheet = UIAlertController(title: "",
+                                                message: "",
+                                                preferredStyle: .actionSheet)
+            actionSheet.addAction(UIAlertAction(title: "Log out",
+                                                style: .destructive,
+                                                handler: { [weak self] _ in
+                                                    
+                                                    guard let strongSelf = self else {
+                                                        return
+                                                    }
+                                                    
+                                                    // Log Out Facebook
+                                                    FBSDKLoginKit.LoginManager().logOut()
+                                                    
+                                                    // Googel Log out
+                                                    GIDSignIn.sharedInstance()?.signOut()
+                                                    
+                                                    do {
+                                                        try FirebaseAuth.Auth.auth().signOut()
+                                                        let vc = LoginVC()
+                                                        let nav = UINavigationController(rootViewController: vc)
+                                                        nav.modalPresentationStyle = .fullScreen
+                                                        strongSelf.present(nav, animated: true)
+                                                    }
+                                                    catch {
+                                                        print("Falied to log out")
+                                                    }
+                                                    
+            }))
+            actionSheet.addAction(UIAlertAction(title: "Cancel",
+                                                style: .cancel,
+                                                handler: nil))
+            
+            strongSelf.present(actionSheet, animated: true)
+        }))
+        
+        tableView.register(ProfileTVC.self, forCellReuseIdentifier: ProfileTVC.id)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableHeaderView = createTableHeader()
@@ -55,10 +104,10 @@ class ProfileVC: UIViewController {
         imageView.layer.masksToBounds = true
         headerView.addSubview(imageView)
         
-        StorageManager.shared.downloadURL(for: path) { [weak self] (result) in
+        StorageManager.shared.downloadURL(for: path) { (result) in
             switch result {
             case .success(let url):
-                self?.downloadImage(imageview: imageView, url: url)
+                imageView.sd_setImage(with: url, completed: nil)
             case .failure(let error):
                 print("Failed to get download Url: \(error)")
             }
@@ -66,20 +115,6 @@ class ProfileVC: UIViewController {
         
         return headerView
     }
-    
-    func downloadImage(imageview: UIImageView, url: URL) {
-        URLSession.shared.dataTask(with: url) { (data, _, error) in
-            guard let data = data, error == nil else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                let image = UIImage(data: data)
-                imageview.image = image
-            }
-        }.resume()
-    }
-    
 }
 
 extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
@@ -89,49 +124,15 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = data[indexPath.row]
-        cell.textLabel?.textAlignment = .center
-        cell.textLabel?.textColor = .red
+        let viewModel = data[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTVC.id,
+                                                 for: indexPath) as! ProfileTVC
+        cell.setUp(with: viewModel)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        let actionSheet = UIAlertController(title: "",
-                                            message: "",
-                                            preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Log out",
-                                            style: .destructive,
-                                            handler: { [weak self] _ in
-                                                
-                                                guard let strongSelf = self else {
-                                                    return
-                                                }
-                                                
-                                                // Log Out Facebook
-                                                FBSDKLoginKit.LoginManager().logOut()
-                                                
-                                                // Googel Log out
-                                                GIDSignIn.sharedInstance()?.signOut()
-                                                
-                                                do {
-                                                    try FirebaseAuth.Auth.auth().signOut()
-                                                    let vc = LoginVC()
-                                                    let nav = UINavigationController(rootViewController: vc)
-                                                    nav.modalPresentationStyle = .fullScreen
-                                                    strongSelf.present(nav, animated: true)
-                                                }
-                                                catch {
-                                                    print("Falied to log out")
-                                                }
-                                                
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel",
-                                            style: .cancel,
-                                            handler: nil))
-        
-        present(actionSheet, animated: true)
+        data[indexPath.row].handler?()
     }
 }

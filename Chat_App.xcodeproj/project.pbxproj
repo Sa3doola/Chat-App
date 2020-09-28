@@ -24,6 +24,8 @@
 		931102E3250D0AE3007D4AC3 /* NewConversationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E2250D0AE3007D4AC3 /* NewConversationVC.swift */; };
 		931102E5250D0B03007D4AC3 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E4250D0B03007D4AC3 /* ProfileVC.swift */; };
 		931102E8250D1666007D4AC3 /* Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931102E7250D1666007D4AC3 /* Extentions.swift */; };
+		93436D472521F46C0001943A /* LocationPickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93436D462521F46C0001943A /* LocationPickerVC.swift */; };
+		93436D49252220B50001943A /* ProfileTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93436D48252220B50001943A /* ProfileTVC.swift */; };
 		936C410B2517A5D500FB2CDA /* ConversationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936C410A2517A5D500FB2CDA /* ConversationTVC.swift */; };
 		9399E613251C017400BF9508 /* NewConversationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9399E612251C017400BF9508 /* NewConversationTVC.swift */; };
 		9399E616251C0A7800BF9508 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9399E615251C0A7800BF9508 /* Models.swift */; };
@@ -51,6 +53,8 @@
 		931102E2250D0AE3007D4AC3 /* NewConversationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationVC.swift; sourceTree = "<group>"; };
 		931102E4250D0B03007D4AC3 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		931102E7250D1666007D4AC3 /* Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extentions.swift; sourceTree = "<group>"; };
+		93436D462521F46C0001943A /* LocationPickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerVC.swift; sourceTree = "<group>"; };
+		93436D48252220B50001943A /* ProfileTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTVC.swift; sourceTree = "<group>"; };
 		936C410A2517A5D500FB2CDA /* ConversationTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTVC.swift; sourceTree = "<group>"; };
 		9399E612251C017400BF9508 /* NewConversationTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationTVC.swift; sourceTree = "<group>"; };
 		9399E615251C0A7800BF9508 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 				931102DD250D0A61007D4AC3 /* PhotoViewerVC.swift */,
 				931102E0250D0A92007D4AC3 /* VideoPlayerVC.swift */,
 				931102E4250D0B03007D4AC3 /* ProfileVC.swift */,
+				93436D462521F46C0001943A /* LocationPickerVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 			children = (
 				936C410A2517A5D500FB2CDA /* ConversationTVC.swift */,
 				9399E612251C017400BF9508 /* NewConversationTVC.swift */,
+				93436D48252220B50001943A /* ProfileTVC.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -326,6 +332,7 @@
 				930B58202512F1FA002B7C59 /* ChatVC.swift in Sources */,
 				931102E3250D0AE3007D4AC3 /* NewConversationVC.swift in Sources */,
 				930A5B2625107B6500E76E4C /* DatabaseManager.swift in Sources */,
+				93436D472521F46C0001943A /* LocationPickerVC.swift in Sources */,
 				931102E1250D0A92007D4AC3 /* VideoPlayerVC.swift in Sources */,
 				931102E8250D1666007D4AC3 /* Extentions.swift in Sources */,
 				931102C4250D0542007D4AC3 /* ConversationVC.swift in Sources */,
@@ -337,6 +344,7 @@
 				9399E616251C0A7800BF9508 /* Models.swift in Sources */,
 				9399E613251C017400BF9508 /* NewConversationTVC.swift in Sources */,
 				931102C2250D0542007D4AC3 /* SceneDelegate.swift in Sources */,
+				93436D49252220B50001943A /* ProfileTVC.swift in Sources */,
 				931102DC250D0A1E007D4AC3 /* RegisterVC.swift in Sources */,
 				93B229A82513C4910081324E /* StorageManager.swift in Sources */,
 			);

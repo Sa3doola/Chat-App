@@ -8,6 +8,7 @@
 
 import Foundation
 import MessageKit
+import CoreLocation
 
 struct ChatAppUser {
     
@@ -90,4 +91,19 @@ struct Sender: SenderType {
     var photoURL: String
     var senderId: String
     var displayName: String
+}
+
+struct Location: LocationItem {
+    var location: CLLocation
+    var size: CGSize
+}
+
+enum ProfileViewModelType {
+    case info, logout
+}
+
+struct ProfileViewModel {
+    let viewModeltype: ProfileViewModelType
+    let title: String
+    let handler: (() -> Void)?
 }

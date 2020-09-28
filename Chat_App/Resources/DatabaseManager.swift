@@ -9,6 +9,7 @@
 import Foundation
 import FirebaseDatabase
 import MessageKit
+import CoreLocation
 
 final class DatabaseManager {
     
@@ -26,7 +27,6 @@ final class DatabaseManager {
         return safeEmail
     }
     
-    
 }
 
 extension DatabaseManager {
@@ -38,7 +38,6 @@ extension DatabaseManager {
                 return
             }
             completion(.success(value))
-            
         }
     }
 }
@@ -129,7 +128,6 @@ extension DatabaseManager {
 //MARK: - Sending messages / Conversations
 
 extension DatabaseManager {
-    
     
     /// Create a new conversation with target user email and first message sent
     public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
@@ -321,7 +319,6 @@ extension DatabaseManager {
                 return
             }
             
-            
             let conversations: [Conversation] = value.compactMap({ dictionary in
                 guard let conversationID = dictionary["id"] as? String,
                     let name = dictionary["name"] as? String,
@@ -337,11 +334,8 @@ extension DatabaseManager {
                 
                 return Conversation(id: conversationID, name: name, otherUserEmail: otherUserEmail, latestMessage: latestMessageObject)
             })
-            
             completion(.success(conversations))
         })
-        
-        
     }
     
     /// Gets all Messages for given conversation
@@ -389,6 +383,19 @@ extension DatabaseManager {
                                       placeholderImage: placeHolder,
                                       size: CGSize(width: 300, height: 300))
                     kind = .photo(media)
+                }
+                else if type == "location" {
+                    let locationComponents = content.components(separatedBy: ",")
+                    guard let longitude = Double(locationComponents[0]),
+                        let latitude = Double(locationComponents[1]) else {
+                            return nil
+                    }
+                    
+                    print("Rendering location: long=\(longitude) | lat= \(latitude)")
+                    
+                    let location = Location(location: CLLocation(latitude: latitude, longitude: longitude),
+                                            size: CGSize(width: 300, height: 300))
+                    kind = .location(location)
                 }
                 else {
                     // text
@@ -455,7 +462,9 @@ extension DatabaseManager {
                     message = targetUrlString
                 }
                 break
-            case .location(_):
+            case .location(let locationData):
+                let location = locationData.location
+                message = "\(location.coordinate.longitude),\(location.coordinate.latitude)"
                 break
             case .emoji(_):
                 break
