@@ -8,6 +8,8 @@ target 'Chat_App' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
+  pod 'Firebase/Crashlytics'
+  pod 'Firebase/Analytics'
   pod 'Firebase/Storage'
 
   # Facebook Sign In

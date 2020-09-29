@@ -42,7 +42,6 @@ class ConversationVC: UIViewController {
         view.addSubview(tableView)
         view.addSubview(noConversationLable)
         setupTableView()
-        fetchConversation()
         startListeningForConversation()
         
         loginObserver = NotificationCenter.default.addObserver(forName: .didLoginNotification, object: nil, queue: .main) { [weak self] _ in
@@ -63,7 +62,10 @@ class ConversationVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
-        
+        noConversationLable.frame = CGRect(x: 10,
+                                           y: (view.height-100)/2,
+                                           width: view.width-20,
+                                           height: 100)
     }
     
     private func startListeningForConversation() {
@@ -82,14 +84,20 @@ class ConversationVC: UIViewController {
             switch result {
             case.success(let conversation):
                 guard !conversation.isEmpty else {
+                    self?.tableView.isHidden = true
+                    self?.noConversationLable.isHidden = false
                     return
                 }
+                self?.noConversationLable.isHidden = true
+                self?.tableView.isHidden = false
                 self?.conversations = conversation
                 
                 DispatchQueue.main.async {
                     self?.tableView.reloadData()
                 }
             case.failure(let error):
+                self?.tableView.isHidden = true
+                self?.noConversationLable.isHidden = false
                 print("failed to get convo: \(error)")
             }
         })
@@ -167,11 +175,6 @@ class ConversationVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
-    private func fetchConversation() {
-        tableView.isHidden = false
-    }
-    
 }
 
 extension ConversationVC: UITableViewDelegate, UITableViewDataSource {
