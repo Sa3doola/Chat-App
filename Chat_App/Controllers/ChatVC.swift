@@ -14,7 +14,7 @@ import SDWebImage
 import AVFoundation
 import AVKit
 
-class ChatVC: MessagesViewController {
+final class ChatVC: MessagesViewController {
     
     private var senderPhotoURL: URL?
     private var otherUserPhotoURL: URL?
@@ -350,7 +350,7 @@ extension ChatVC: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         guard !text.replacingOccurrences(of: " ", with: "").isEmpty,
-            let sender = self.selfSender,
+            let sender = selfSender,
             let messageId = createMessageId() else {
                 return
         }
@@ -365,7 +365,7 @@ extension ChatVC: InputBarAccessoryViewDelegate {
         if isNewconversation {
             // create new coversation in database
             
-            DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: message, completion: { [weak self] success in
+            DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: title ?? "User", firstMessage: message, completion: { [weak self] success in
                 if success {
                     print("message sent")
                     self?.isNewconversation = false
@@ -381,7 +381,7 @@ extension ChatVC: InputBarAccessoryViewDelegate {
         }
         else {
             
-            guard let conversationID = conversationID, let name = self.title else {
+            guard let conversationID = conversationID, let name = title else {
                 return  }
             // append to existing conversation
             DatabaseManager.shared.sendMessage(to: conversationID, otherUserEmail: otherUserEmail, name: name, newMessage: message) { [weak self] (success) in
@@ -457,7 +457,7 @@ extension ChatVC: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDel
         let sender = message.sender
         if sender.senderId == selfSender?.senderId {
             // our image
-            if let currentUserImageURL = self.senderPhotoURL {
+            if let currentUserImageURL = senderPhotoURL {
                 avatarView.sd_setImage(with: currentUserImageURL, completed: nil)
             }
             else {
@@ -521,7 +521,7 @@ extension ChatVC: MessageCellDelegate {
             let coordinates = locationData.location.coordinate
             let vc = LocationPickerVC(coordinates: coordinates)
             vc.title = "Location"
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
 
         default:
             break
@@ -543,7 +543,7 @@ extension ChatVC: MessageCellDelegate {
             }
             
             let vc = PhotoViewerVC(with: imageUrl)
-            self.navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
             
         case.video(let media):
             guard let videoUrl = media.url else {

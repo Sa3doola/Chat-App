@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class LocationPickerVC: UIViewController {
+final class LocationPickerVC: UIViewController {
     
     public var completion: ((CLLocationCoordinate2D) -> Void)?
     private var coordinates: CLLocationCoordinate2D?
@@ -21,10 +21,9 @@ class LocationPickerVC: UIViewController {
         return map
     }()
     
-    
     init(coordinates: CLLocationCoordinate2D?) {
         self.coordinates = coordinates
-        self.isPickable = false
+        self.isPickable = coordinates == nil
         super.init(nibName: nil, bundle: nil)
     }
     

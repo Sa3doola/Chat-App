@@ -12,7 +12,7 @@ import FBSDKLoginKit
 import GoogleSignIn
 import SDWebImage
 
-class ProfileVC: UIViewController {
+final class ProfileVC: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     

@@ -10,7 +10,8 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 
-class ConversationVC: UIViewController {
+/// Controller that shows list of conversations
+final class ConversationVC: UIViewController {
     
     private let spinner = JGProgressHUD(style: .dark)
     
@@ -219,13 +220,13 @@ extension ConversationVC: UITableViewDelegate, UITableViewDataSource {
             // begin delete
             let conversationID = conversations[indexPath.row].id
             tableView.beginUpdates()
+            self.conversations.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
             
-            DatabaseManager.shared.deleteConversation(conversationID: conversationID) { [weak self] (success) in
-                if success {
-                    self?.conversations.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .left)
+            DatabaseManager.shared.deleteConversation(conversationID: conversationID) { (success) in
+                if !success {
+                    print("Failed to delete")
                 }
-                
             }
             tableView.endUpdates()
         }

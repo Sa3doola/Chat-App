@@ -10,7 +10,7 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 
-class RegisterVC: UIViewController {
+final class RegisterVC: UIViewController {
     
     private let spinner = JGProgressHUD(style: .dark)
     
@@ -319,7 +319,7 @@ extension RegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDel
         guard let selectImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
             return
         }
-        self.profileImageView.image = selectImage
+        profileImageView.image = selectImage
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

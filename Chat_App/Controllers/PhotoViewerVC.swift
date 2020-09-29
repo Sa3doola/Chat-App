@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class PhotoViewerVC: UIViewController {
+final class PhotoViewerVC: UIViewController {
     
     private let url: URL
     
@@ -25,7 +25,6 @@ class PhotoViewerVC: UIViewController {
     private let imageView: UIImageView = {
        let image = UIImageView()
         image.contentMode = .scaleAspectFit
-        
         return image
     }()
 
